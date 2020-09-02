@@ -1,0 +1,1109 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+<style>
+	div{
+		position: relative;
+	}
+	#home{
+		position: fixed;
+		bottom: 5px;
+		right: 5px;
+	}
+	.mbody{
+		margin:12px;
+		border-radius: 15px;
+		width: 900px;
+		text-align:center;
+	}
+	.mbody .dbody{
+		line-height: 250px;
+	    text-align:center;
+	}
+	.mbody .mstigmata{
+		width: 85px;
+	}
+	.mbody .divbody{
+		display: inline-block;
+		position relative;
+		width: 255px;
+	}
+	
+	.mbody .mtop{
+		position: absolute;
+		top:0px;
+		right: 0;
+	}
+	.minfo{
+		position: absolute;
+		top:0px;
+		left: 0;
+	}
+	.mbody .mbot{
+		position: absolute;
+		top: 90px;
+		left: 0;
+	}
+	.mbody .mval{
+		border-radius: 10px;
+	}
+	.mbody legend{
+		border-radius: 10px;
+		color:#fff;
+		background-color:#f69c55;
+		font-size:1.8em;
+		font-weight: 900;
+		padding: 0.3em;
+	}
+	#dhome:hover, #s_memories img:hover, .minfo:hover{
+		cursor: pointer;
+	}
+	#dhome{
+		border-radius: 100%;
+		position: fixed;
+		bottom: 50px;
+		right: 50px;
+	}
+	#dhome img{
+		border-radius: 100%;
+	}
+	#total_body{
+		width: 960px;
+	}
+	.top_button:hover, .type:hover, .all:hover, .ttype:hover{
+		background-color: #f69c55;
+		cursor: pointer;
+	}
+	.top_button{
+		color:rgb(0,38,97);
+		font-weight:bold;
+	}
+	#stigmata_temp{
+		height: 5000px;
+	}
+	#s_stigmata_use:hover, .fclose:hover{
+		cursor: pointer;
+	}
+	#s_stigmata_use{
+		width:116px;
+		height: 40px;
+		line-height: 40px;
+		text-align:center;
+		font-size: 22px;
+		background-color: rgba( 255, 255, 255, 0.5 );
+		border: 2px inset #f69c55;
+	}
+	.type, .all{
+		display:inline;
+		float:left;
+		width:116px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 22px;
+		text-align:center;
+		background-color: rgba( 255, 255, 255, 0.5 );
+		border: 2px dashed #f69c55;
+	}
+	.ttype{
+		display:inline;
+		float:left;
+		width:188px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 22px;
+		text-align:center;
+		background-color: rgba( 255, 255, 255, 0.5 );
+		border: 2px dashed #f69c55;
+	}
+	.skill1:hover, .skill2:hover, .skill3:hover, .skill4:hover, .skill5:hover, .skill6:hover{
+		cursor: pointer;
+		width: 194px;
+		border: 2px solid #f69c55;
+	}
+	#container{
+		width: 960px;
+		text-align:center;
+	}
+	#sub_area{
+		width: 960px;
+		text-align:center;
+	}
+	.top_temp{
+		height: 373.35px;
+	}
+	#top_area{
+		width: 960px;
+		height: 461.35px;
+		background-size: 960px 461.35px;
+		background-image: url("https://t1.daumcdn.net/cfile/tistory/9964273D5C46943D05")
+	}
+	.weaponIcon:hover, .valkry_item, .stigmata_img img:hover{
+		cursor: pointer;
+	}
+	.weaponIcon{
+		width: 120px;
+		height: 105px;
+	}
+	.top_button{
+		display:inline;
+		float:left;
+		width:188px;
+		height: 40px;
+		line-height: 40px;
+		text-align:center;
+		font-size: 22px;
+		background-color: rgba( 255, 255, 255, 0.7 );
+		border: 2px dashed #f69c55;
+	}
+	div.a, #s_valkry, .t_body_detail{
+		margin: auto;
+		text-align: left;
+	}
+	#c_weapon, #c_notice, #c_caution, #c_memories, #c_pc, #float_body {
+		text-align: left;
+	}
+	.top {
+		position: fixed;
+		bottom: 20px;
+		left: 10px;
+	}
+	.float_stigmata{
+		margin:4px;
+	}
+	.float_body{
+		BACKGROUND-COLOR: #fffff0;
+        max-width:650px;
+		border:2px solid #fffff0;
+		border-radius:0.5em;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+		padding:4px;
+	}
+	#descTop, #descMid, #descBot, #setOption{
+		padding-left:10px;
+	}
+	.stigmata_name {
+		width: 420px;
+		margin:4px;
+		text-align:center;
+		font-size:18px;
+		border:2px solid #1bf;
+		padding:9px;
+		font-weight: bold;
+		//color: #fff;
+		line-height: 1em;
+		border-radius:0.5em;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+	}
+	.sitgmata_name_value{
+		display: inline;
+		text-align:center;
+	}
+	.stigmata_set_container{
+		position: absolute;
+	}
+	.stigmata_set2{
+		//position: absolute;
+		//left : 20px;
+		padding:2px;
+		display: inline;
+		border:2px solid #da70d6;
+		BACKGROUND-COLOR: #da70d6;
+		color:#fff;
+		margin-top:-4px;
+		margin-left:3px;
+		margin-right:3px;
+		border-radius:0.5em;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+	}
+	.stigmata_none{
+		display:none;
+	}
+	.stigmata_set3{
+		//position: absolute;
+		//left : 65px;
+
+		padding:2px;
+		display: inline;
+		border:2px solid #da70d6;
+		BACKGROUND-COLOR: #da70d6;
+		color:#fff;
+		margin-top:-4px;
+		margin-left:3px;
+		margin-right:3px;
+		border-radius:0.5em;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+	}
+	.stigmata_img{
+		width: 442px;
+		margin:4px;
+	}
+	.stigmata{
+		margin:3px;
+		border:2px;
+		border-color:black;
+		border-style:solid;
+		border-radius:0.5em;
+	}
+	.stigmata_rec{
+		margin:3px;
+		border:2px;
+		border-color:red;
+		border-style:solid;
+		border-radius:0.5em;
+	}
+	.temp_stigmata{
+		margin:5px;
+	}
+	.float_body th,.float_body td,.float_body tr {
+		padding: 5px;
+		text-align: left;    
+	}
+
+</style>
+<script>
+	//google firestore initialize
+	var config = {
+		apiKey: "AIzaSyAs6hOrsZO_NtABH1n32Cf97-XFNuzRw-c",
+		authDomain: "hi3db-898a1.firebaseapp.com",
+		databaseURL: "https://hi3db-898a1.firebaseio.com",
+		projectId: "hi3db-898a1",
+		storageBucket: "hi3db-898a1.appspot.com",
+		messagingSenderId: "827915906090"
+	};
+	firebase.initializeApp(config);
+	var grade='{"0":"https://t1.daumcdn.net/cfile/tistory/996347425C55AE3B28","1":"https://t1.daumcdn.net/cfile/tistory/99B989425C55AE3C2E","2":"https://t1.daumcdn.net/cfile/tistory/994898425C55AE3C29","3":"https://t1.daumcdn.net/cfile/tistory/99BC73425C55AE3C2E"}';
+	var videoType = '{"bili":"https://www.bilibili.com/video/av"}';
+	jQuery(document).ready(function() {
+		var fb = firebase.firestore();
+		var stigmata = null;
+		var weapon = null;
+		var valkry = null;
+		var memory = null;
+		var gradeDB = JSON.parse(grade);
+		var videoUrl = JSON.parse(videoType);
+		var etc = null;
+		var selectedItem = {};
+		
+		var isInitStigmata = false;
+		var isInitWeapon = false;
+		var isInitValkry = false;
+		var isInitMemory = false;
+
+		initStigmata();
+		initWeapon();
+		initValkry();
+		initMemory();
+		initEtc();
+		initSelectedStigmata();
+		initSelectedWeapon();
+		
+		function initSelectedStigmata(){
+			var tempStig = new Object();
+			tempStig.top = null;
+			tempStig.mid = null;
+			tempStig.bot = null;			
+			selectedItem["stigmata"] = tempStig;
+		}
+		function initSelectedWeapon(){
+			selectedItem["weapon"] = null;
+		}
+		//Database Initialize
+		function initStigmata(){
+			fb.collection('hidb').doc('stigmata').get().then((snapshot)=>{
+				stigmata = snapshot.data().datas
+				isInitStigmata = true;
+				//console.log(stigmata);
+			});
+		}
+		function initWeapon(){
+			fb.collection('hidb').doc('weapon').get().then((snapshot)=>{
+				weapon = snapshot.data().datas
+				reorderWeapon();
+				isInitWeapon = true;
+			});
+		}
+		function initValkry(){
+			fb.collection('hidb').doc('valkry').get().then((snapshot)=>{
+				valkry = snapshot.data().datas
+				reorderValkry();
+				isInitValkry = true;
+				//console.log(valkry);
+			});
+		}
+		function initMemory(){
+			fb.collection('hidb').doc('memory').get().then((snapshot)=>{
+				memory = snapshot.data().datas
+				//console.log(memory);
+			});
+		}
+		function initEtc(){
+			fb.collection('hidb').doc('etc').get().then((snapshot)=>{
+				etc = snapshot.data()
+				$("#c_notice").html(etc.notice);
+				$("#tip_support").html(etc.tip_support);
+				$("#c_pc").html(etc.pc);
+				
+				$("#c_caution").html(etc.advice);
+
+
+				$('#copy').click(function() {
+					copyToClipboard("游品位");
+					alert( '복사 되었습니다.' );
+				});
+			});
+		}
+
+		//무기 역순 (key 값 reverse 방법 알아내면 따로 적용 할것
+		function reorderWeapon(){
+			var temp = {};
+			var karr = [];
+			$.each(weapon, function(key, item){
+				karr.push(key);
+			});
+			$.each(karr.reverse(), function(key, value){
+				temp[value] = weapon[value];
+			});
+			weapon = temp;
+			//console.log(weapon);
+		}
+
+		//발키리 순서 재조정
+		function reorderValkry(){
+			var varr = ["kia","mei","bro","him","sak","the","kal","huk","rit","ole","see"];
+			var temp = {};
+			$.each(varr, function(keyo, itemp){
+				$.each(valkry, function(key, item){
+					if(key.substring(0,3) == itemp){
+						//console.log(key);
+						temp[key] = item;
+					}
+				});
+			});
+			//console.log(temp);
+			valkry = temp;
+			
+			$.each(valkry, function(key, item){
+				console.log(key + " - " + item.name);
+			});
+			
+		}
+
+		function makeStigList(id, stigmata){
+			//폼
+			var strTemp = '<div class="stigmata_body" id="id_stigmata_body" style="width: 450px;display: inline-block;" >					<div class="stigmata_name"><div class="stigmata_set_container"><div class="stigmata_set2">SET2</div><div class = "stigmata_set3">SET3</div></div> <div class="sitgmata_name_value">id_stigmata_name</div></div>					<div class="stigmata_img" align="center">					<img class="class_top_stigmata" src="id_stigmata_top_img" name="id_stigmata_name" id="top" key="id_stigmata_key">					<img class="class_mid_stigmata" src="id_stigmata_mid_img" name="id_stigmata_name" id="mid" key="id_stigmata_key">					<img class="class_bot_stigmata" src="id_stigmata_bot_img" name="id_stigmata_name" id="bot" key="id_stigmata_key">					</div>					<div class="sitgmata_rec"></div></div>';
+			//성흔 테두리 결정
+			if(stigmata.top_desc == "none"){
+				strTemp = strTemp.replace(/class_top_stigmata/g, "temp_stigmata");
+			}else if(stigmata.top_rec == "y"){
+				strTemp = strTemp.replace(/class_top_stigmata/g, "stigmata_rec");
+			}else{
+				strTemp = strTemp.replace(/class_top_stigmata/g, "stigmata");
+			}
+			if(stigmata.mid_desc == "none"){
+				strTemp = strTemp.replace(/class_mid_stigmata/g, "temp_stigmata");
+			}else if(stigmata.mid_rec == "y"){
+				strTemp = strTemp.replace(/class_mid_stigmata/g, "stigmata_rec");
+			}else{
+				strTemp = strTemp.replace(/class_mid_stigmata/g, "stigmata");
+			}
+			if(stigmata.bot_desc == "none"){
+				strTemp = strTemp.replace(/class_bot_stigmata/g, "temp_stigmata");
+			}else if(stigmata.bot_rec == "y"){
+				strTemp = strTemp.replace(/class_bot_stigmata/g, "stigmata_rec");
+			}else{
+				strTemp = strTemp.replace(/class_bot_stigmata/g, "stigmata");
+			}
+			//세트 추천 아이콘 표기
+			var temp5 = "stigmata_set2";
+			if(stigmata.set2_rec == "y"){
+				temp5 = "stigmata_set3";
+			}else{
+				strTemp = strTemp.replace(/stigmata_set2/g, "stigmata_none");
+			}
+			if(stigmata.set3_rec == "y"){
+				strTemp = strTemp.replace(/stigmata_set3/g, temp5);
+			}else{
+				strTemp = strTemp.replace(/stigmata_set3/g, "stigmata_none");
+			}
+			//이미지 경로 설정
+			strTemp = strTemp.replace(/id_stigmata_body/g, id+"_body");
+			strTemp = strTemp.replace(/id_stigmata_name/g, stigmata.name);
+			strTemp = strTemp.replace(/id_stigmata_top_img/g, stigmata.top_src);
+			strTemp = strTemp.replace(/id_stigmata_mid_img/g, stigmata.mid_src);
+			strTemp = strTemp.replace(/id_stigmata_bot_img/g, stigmata.bot_src);
+			strTemp = strTemp.replace(/id_stigmata_key/g, id);
+			return strTemp;
+		}
+		// param : targetDiv - 항목이 그려질 공간
+		//         item - 무기
+		function makeWeaponInfos(targetDiv, item){
+			var strTemp = "<table><tr><td rowspan='2' style='width:140px'><img src='weapon_img'></td><td><font size='3'>weapon_name</font></td></tr><tr><td><font size='3'>weapon_stat</font></td></tr>weapon_skill</table>";
+			if(item != null){
+				var strSkill = "";
+				$.each(item.skill, function(key, item){
+					if(item != null && item != "none"){
+						strSkill = strSkill + "<tr><td colspan='2'>"+item+"</td></tr>";
+					}
+				});
+				strTemp = strTemp.replace(/weapon_img/g, item.src);
+				strTemp = strTemp.replace(/weapon_name/g, item.name);
+				strTemp = strTemp.replace(/weapon_stat/g, "공격력 : " + item.atk + " 회심 : " + item.cri);
+				strTemp = strTemp.replace(/weapon_skill/g, strSkill);			
+			}else{
+				strTemp = "";
+			}
+			targetDiv.html(strTemp);
+		}
+
+		function makeWeaponImage(key, item){
+			return "<img src = '"+item.src+"' class='weaponIcon' id='"+key+"'>";
+		}
+
+		function makeValkryImage(key, item){
+			return "<img width='120' src='"+item.face+"' class='valkry_item' id='"+key+"'>";
+		}
+
+		// param : targetDiv - 항목이 그려질 공간
+		function drawStigmatas(targetDiv){
+			targetDiv.html("");
+			$.each(stigmata, function(key, item){
+				targetDiv.append(makeStigList(key, item));
+			});
+			
+			//성흔 이미지 클릭 이벤트
+			$('#stigmata_area img').click(function(){
+				if($(this).attr('class') != 'temp_stigmata'){
+					console.log("call");
+					switch($(this).attr('id')){
+						case 'top':
+							selectedItem["stigmata"].top = stigmata[$(this).attr('key')];
+						break;
+						case 'mid':
+							selectedItem["stigmata"].mid = stigmata[$(this).attr('key')];
+						break;
+							case 'bot':
+							selectedItem["stigmata"].bot = stigmata[$(this).attr('key')];
+						break;
+					}
+					makeStigCombInfo(selectedItem["stigmata"].top, selectedItem["stigmata"].mid, selectedItem["stigmata"].bot, $("#float_body"));
+				}
+			});
+		}
+
+		// param : targetDiv - 항목이 그려질 공간
+		function drawWeapons(targetDiv){
+			targetDiv.html("");
+			var tempId = "";
+			$.each(weapon, function(key, item){
+				//console.log(tempId)
+				//console.log(key.substring(0,3));
+				if(tempId != key.substring(0,3)){
+					//targetDiv.append('<br />');
+				}
+				targetDiv.append(makeWeaponImage(key, item));
+				tempId = key.substring(0,3);
+			});
+			
+			//무기 이미지 클릭 이벤트
+			$('#w_area img').click(function(){
+				selectedItem["weapon"] = weapon[$(this).attr('id')];
+				makeWeaponInfos($("#float_body"), selectedItem["weapon"]);
+			});
+		}
+		// param : targetDiv - 항목이 그려질 공간
+		function drawValkrys(targetDiv){
+			var temp = "";
+			$.each(valkry, function(key, item){
+				var strTemp = "";
+				if(temp != ""){
+					if(temp != key.substring(0, key.length-1)){
+						targetDiv.append("<br />");
+						temp = key.substring(0, key.length-1);
+					}
+				}else{
+					temp = key.substring(0, key.length-1);
+				}
+				strTemp = "<img width='120' src='"+item.face+"' class='valkry_item' id='"+key+"'>";
+				targetDiv.append(strTemp);
+			});
+			$("#s_valkry img").click(function(){
+				drawValkryInfo($("#c_valkry"),valkry[$(this).attr('id')]);
+			});
+		}
+
+		// param : targetDiv - 항목이 그려질 공간
+		//		   item - 타겟 발키리
+		function drawValkryInfo(targetDiv, item){
+			console.log(item);
+			var strTemp = "<img src='"+item.face+"'><br/>";
+			strTemp = strTemp + "<h1>" + item.name + "</h1>";
+			if(item.video != null && item.video != "none"){
+				strTemp = strTemp + "<br /><br /><iframe width='950' height='600' src='"+item.video+"' frameborder='0' allowfullscreen=''></iframe><br /><br /><br />";
+			}
+			strTemp = strTemp + "<div style='width: 960px; height: 130px;'><img class='skill1' width='150' src='"+item.skill1+"'>";
+			strTemp = strTemp + "<img class='skill2' width='150' src='"+item.skill2+"'>";
+			strTemp = strTemp + "<img class='skill3' width='150' src='"+item.skill3+"'>";
+			strTemp = strTemp + "<img class='skill4' width='150' src='"+item.skill4+"'>";
+			strTemp = strTemp + "<img class='skill5' width='150' src='"+item.skill5+"'>";
+			strTemp = strTemp + "<img class='skill6' width='150' src='"+item.skill6+"'></div>";
+			strTemp = strTemp + "<img id='vSkillDetail' width='950' src='"+item.skill1+"'>";
+			targetDiv.html(strTemp);
+			$("#c_valkry img").click(function(){
+				if($(this).attr("class").substring(0, 5) == "skill"){
+					$("#vSkillDetail").attr("src",$(this).attr("src"));
+				}
+			});
+			$('html, body').animate({ scrollTop: $('#c_valkry').offset().top }, 1000);
+		}
+
+		// param : top - 상단 성흔
+		//         mid - 중단 성흔
+		//         bot - 하단 성흔
+		//         targetDiv - 항목이 그려질 공간
+		function makeStigCombInfo(top, mid, bot, targetDiv){
+			var topImg = "http://cfile4.uf.tistory.com/image/99F0D03359F4A2F30AD0CD";
+			var midImg = "http://cfile26.uf.tistory.com/image/99EA113359F4A2F40BBA19";
+			var botImg = "http://cfile30.uf.tistory.com/image/998BE13359F4A2F413714E";
+			var topName = "";
+			var midName = "";
+			var botName = "";
+			var topDesc = "";
+			var midDesc = "";
+			var botDesc = "";
+			var setDesc = "";
+			var strTemp = "";
+			if(top != null){
+				topImg = top.top_src;
+				topName = top.name;
+				topDesc = top.top_desc;
+			}else{
+				top = new Object();
+				top.name = "nontop";
+			}
+			if(mid != null){
+				midImg = mid.mid_src;
+				midName = mid.name;
+				midDesc = mid.mid_desc;
+			}else{
+				mid = new Object();
+				mid.name = "nonmid";
+			}
+			if(bot != null){
+				botImg = bot.bot_src;
+				botName = bot.name;
+				botDesc = bot.bot_desc;
+			}else{
+				bot = new Object();
+				bot.name = "nonbot";
+			}
+
+			//2세트
+			if(top.name == mid.name || top.name == bot.name){
+				setDesc = "2세트<br />" + top.set2;
+			}else if(mid.name == bot.name){
+				setDesc = "2세트<br />" + mid.set2;
+			}
+			//3세트
+			if(top.name == mid.name && mid.name == bot.name){
+				setDesc = setDesc+ "<br /><br />3세트<br />" + top.set3;
+			}
+			strTemp = "<img src='"+topImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+midImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+botImg+"' style='margin:9px;' id='top_stigmata' key=''><br/><br/><div id='topTitle' class='topTitle'>상 : "+topName+"</div><br/><div id='descTop' class='descTop'>"+topDesc+"</div><br /><div id='midTitle' class='midTitle'>중 : "+midName+"</div><br/><div id='descMid' class='descMid'>"+midDesc+"</div><br /><div id='botTitle' class='botTitle'>하 : "+botName+"</div><br/><div id='descBot' class='descBot'>"+botDesc+"</div><br /><div id='setTitle' class='setTitle'>세트 옵션</div><br /><div id='setOption' class='setOption'>" + setDesc+"</div><br/><div>필터링 : <input type='text' class='filterText'></div>";
+			targetDiv.html(strTemp);
+			$(".filterText").keyup(function(){filterStigmata($(this).val())});
+		}
+
+		// param : weapon - 무기
+		//         top - 상단 성흔
+		//         mid - 중단 성흔
+		//         bot - 하단 성흔
+		//         targetDiv - 항목이 그려질 공간
+		function makeStigWeaponInfo(weapon, top, mid, bot, targetDiv){
+		
+			var weaponImg = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+			var topImg = "http://cfile4.uf.tistory.com/image/99F0D03359F4A2F30AD0CD";
+			var midImg = "http://cfile26.uf.tistory.com/image/99EA113359F4A2F40BBA19";
+			var botImg = "http://cfile30.uf.tistory.com/image/998BE13359F4A2F413714E";
+			var weaponName = "";
+			var topName = "";
+			var midName = "";
+			var botName = "";
+			var weaponDesc = "";
+			var topDesc = "";
+			var midDesc = "";
+			var botDesc = "";
+			var setDesc = "";
+			var strTemp = "";
+			if(weapon != null){
+				weaponImg = weapon.src;
+				weaponName = weapon.name;
+				weaponDesc = "공격 : "+weapon.atk+" 회심 : "+weapon.cri;
+				$.each(weapon.skill, function(key, item){
+					if(item != null && item != "none"){
+						weaponDesc = weaponDesc + "<br />"+item;
+					}
+				});
+			}
+			if(top != null){
+				topImg = top.top_src;
+				topName = top.name;
+				topDesc = top.top_desc;
+			}else{
+				top = new Object();
+				top.name = "nontop";
+			}
+			if(mid != null){
+				midImg = mid.mid_src;
+				midName = mid.name;
+				midDesc = mid.mid_desc;
+			}else{
+				mid = new Object();
+				mid.name = "nonmid";
+			}
+			if(bot != null){
+				botImg = bot.bot_src;
+				botName = bot.name;
+				botDesc = bot.bot_desc;
+			}else{
+				bot = new Object();
+				bot.name = "nonbot";
+			}
+			//2세트
+			if(top.name == mid.name || top.name == bot.name){
+				setDesc = "2세트<br />" + top.set2;
+			}else if(mid.name == bot.name){
+				setDesc = "2세트<br />" + mid.set2;
+			}
+			//3세트
+			if(top.name == mid.name && mid.name == bot.name){
+				setDesc = setDesc+ "<br /><br />3세트<br />" + top.set3;
+			}
+			strTemp = "<table><tr><td><img src='"+weaponImg+"' style='margin:9px;' id='cbweapon' key=''><img src='"+topImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+midImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+botImg+"' style='margin:9px;' id='top_stigmata' key=''></td><td align='right' style='vertical-align: top;'><img src='https://t1.daumcdn.net/cfile/tistory/990325405C8AF39627' class='fclose'></td></tr></table><br/><br/><div id='cwTitle' class='cwTitle'>무기 : "+weaponName+"</div><br /><div id='cwDesc'>"+weaponDesc+"</div><br/><div id='topTitle' class='topTitle'>상 : "+topName+"</div><br/><div id='descTop' class='descTop'>"+topDesc+"</div><br /><div id='midTitle' class='midTitle'>중 : "+midName+"</div><br/><div id='descMid' class='descMid'>"+midDesc+"</div><br /><div id='botTitle' class='botTitle'>하 : "+botName+"</div><br/><div id='descBot' class='descBot'>"+botDesc+"</div><br /><div id='setTitle' class='setTitle'>세트 옵션</div><br /><div id='setOption' class='setOption'>"+setDesc+"</div>";
+			targetDiv.html(strTemp);
+			$(".fclose").click(function(){$("#float_body").html("");});
+		}
+
+		// param : targetDiv - 항목이 그려질 공간
+		function drawMemory(target,targetDiv){
+			targetDiv.html("");
+			$.each(memory[target], function(){
+				var topImg1 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var midImg1 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var botImg1 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var topImg2 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var midImg2 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var botImg2 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var topImg3 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var midImg3 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var botImg3 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var weaponImg1 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var weaponImg2 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var weaponImg3 = "https://t1.daumcdn.net/cfile/tistory/990CEB435C5648B402";
+				var top1id = null;
+				var mid1id = null;
+				var bot1id = null;
+				var weapon1id = null;
+				var top2id = null;
+				var mid2id = null;
+				var bot2id = null;
+				var weapon2id = null;
+				var top3id = null;
+				var mid3id = null;
+				var bot3id = null;
+				var weapon3id = null;
+				if($(this)[0].top1 != null && $(this)[0].top1.trim() != "none"){
+					topImg1 = stigmata[$(this)[0].top1].top_src;
+					top1id = $(this)[0].top1;
+				}
+				if($(this)[0].mid1 != null && $(this)[0].mid1.trim() != "none"){
+					midImg1 = stigmata[$(this)[0].mid1].mid_src;
+					mid1id = $(this)[0].mid1;
+				}
+				if($(this)[0].bot1 != null && $(this)[0].bot1.trim() != "none"){
+					botImg1 = stigmata[$(this)[0].bot1].bot_src;
+					bot1id = $(this)[0].bot1;
+				}
+				if($(this)[0].top2 != null && $(this)[0].top2.trim() != "none"){
+					topImg2 = stigmata[$(this)[0].top2].top_src;
+					top2id = $(this)[0].top2;
+				}
+				if($(this)[0].mid2 != null && $(this)[0].mid2.trim() != "none"){
+					midImg2 = stigmata[$(this)[0].mid2].mid_src;
+					mid2id = $(this)[0].mid2;
+				}
+				if($(this)[0].bot2 != null && $(this)[0].bot2.trim() != "none"){
+					botImg2 = stigmata[$(this)[0].bot2].bot_src;
+					bot2id = $(this)[0].bot2;
+				}
+				if($(this)[0].top3 != null && $(this)[0].top3.trim() != "none"){
+					topImg3 = stigmata[$(this)[0].top3].top_src;
+					top3id = $(this)[0].top3;
+				}
+				if($(this)[0].mid3 != null && $(this)[0].mid3.trim() != "none"){
+					midImg3 = stigmata[$(this)[0].mid3].mid_src;
+					mid3id = $(this)[0].mid3;
+				}
+				if($(this)[0].bot3 != null && $(this)[0].bot3.trim() != "none"){
+					botImg3 = stigmata[$(this)[0].bot3].bot_src;
+					bot3id = $(this)[0].bot3;
+				}
+				if($(this)[0].weapon1 != null && $(this)[0].weapon1 != "none"){
+					weaponImg1 = weapon[$(this)[0].weapon1].src;
+					weapon1id = $(this)[0].weapon1;
+				}
+				if($(this)[0].weapon2 != null && $(this)[0].weapon2 != "none"){
+					weaponImg2 = weapon[$(this)[0].weapon2].src;
+					weapon2id = $(this)[0].weapon2;
+				}
+				if($(this)[0].weapon3 != null && $(this)[0].weapon3 != "none"){
+					weaponImg3 = weapon[$(this)[0].weapon3].src;
+					weapon3id = $(this)[0].weapon3;
+				}
+				var data = '<fieldset class="mbody"><legend>'+$(this)[0].score+'</legend><div name="minfo" style="width:255px;display: inline-block;"><div class="divbody" style="width:255px;text-align:right;">	<img src="https://t1.daumcdn.net/cfile/tistory/9973C7415C89A5592D" class="minfo" top="'+top1id+'" mid="'+mid1id+'" bot="'+bot1id+'" weapon="'+weapon1id+'">  <img src="'+valkry[$(this)[0].valkry1].face+'" style="width:200px;" name="'+$(this)[0].valkry1+'" class="mval"><br />	<div class="mtop">	<img src="'+gradeDB[$(this)[0].rank1]+'" style="width:50px;"></div>	<div class="mbot">		<img src="'+weaponImg1+'" style="width:90px;">	</div></div>	<img src="'+topImg1+'" style="width:80px;">	<img src="'+midImg1+'" style="width:80px;">	<img src="'+botImg1+'" style="width:80px;">					</div>'
+				data = data +'<div name="minfo" class="divbody" style="width:255px;text-align:right;">    <img src="https://t1.daumcdn.net/cfile/tistory/9973C7415C89A5592D" class="minfo" top="'+top2id+'" mid="'+mid2id+'" bot="'+bot2id+'" weapon="'+weapon2id+'">	<img src="'+valkry[$(this)[0].valkry2].face+'" style="width:200px;" name="'+$(this)[0].valkry2+'" class="mval">	<div class="mtop"><img src="'+gradeDB[$(this)[0].rank2]+'" style="width:50px;">	</div>	<div class="mbot">		<img src="'+weaponImg2+'" style="width:90px;">	</div>	<img src="'+topImg2+'" style="width:80px;">	<img src="'+midImg2+'" style="width:80px;">	<img src="'+botImg2+'" style="width:80px;">					</div>'
+				if($(this)[0].valkry3 != "none"){
+					data = data + '<div name="minfo" class="divbody" style="width:255px;text-align:right;">	 <img src="https://t1.daumcdn.net/cfile/tistory/9973C7415C89A5592D" class="minfo" top="'+top3id+'" mid="'+mid3id+'" bot="'+bot3id+'" weapon="'+weapon3id+'">  <img src="'+valkry[$(this)[0].valkry3].face+'" style="width:200px;" name="'+$(this)[0].valkry3+'" class="mval">	<div class="mtop">	<img src="'+gradeDB[$(this)[0].rank3]+'" style="width:50px;"></div>	<div class="mbot">		<img src="'+weaponImg3+'" style="width:90px;">	</div>	<img src="'+topImg3+'" style="width:80px;">	<img src="'+midImg3+'" style="width:80px;">	<img src="'+botImg3+'" style="width:80px;"></div>';
+				}
+				if($(this)[0].video != "none"){
+					data = data + '<a href="'+videoUrl[$(this)[0].vtype]+$(this)[0].video+'" target="_blank"><img src="https://t1.daumcdn.net/cfile/tistory/995200425C55AE3B31"></a>';
+				}
+				data = data + '</fieldset>';
+				targetDiv.append(data);
+			});
+			$('html, body').animate({ scrollTop: $('#c_memories').offset().top }, 1000);
+			$("#c_memories .mval").click(function(){
+				console.log($(this).css("background-color"));
+				$("img[name="+$(this).attr("name")+"]").each(function(){
+					
+					if($(this).css("background-color")=="rgb(246, 156, 85)"){
+						$(this).css("background-color", "#55baf6")
+					}else if($(this).css("background-color")=="rgb(85, 186, 246)"){
+						$(this).css("background-color", "")
+					}else {
+						$(this).css("background-color", "rgb(246, 156, 85)");
+					}
+				});
+			});
+			$(".minfo").click(function(){
+				
+				var topId = $(this).attr('top');
+				var midId = $(this).attr('mid');
+				var botId = $(this).attr('bot');
+				var weaponId = $(this).attr('weapon');
+				makeStigWeaponInfo(weapon[weaponId], stigmata[topId], stigmata[midId], stigmata[botId], $("#float_body"));
+			});
+		}
+		$("#s_memories img").click(function(){
+			drawMemory($(this).attr('class'),$("#c_memories"));
+		});
+
+		// param : temp - 필터링할 텍스트
+		function filterStigmata(temp){			
+			$.each(stigmata, function(key, item){
+				if(item.top_desc.includes(temp) || item.mid_desc.includes(temp) || item.bot_desc.includes(temp) || item.name.includes(temp) || item.set2.includes(temp) || item.set3.includes(temp)){
+					$("#"+key+"_body").css("display","inline-block");
+				}else{
+					$("#"+key+"_body").css("display","none");
+				}
+
+			});
+		}
+		function filterWeapon(temp){
+			$.each(weapon, function(key, item){
+				if(temp == "all"){
+					$("#"+key).css("display","inline-block");
+				}else{
+					if(key.substring(2,3) == temp){
+						$("#"+key).css("display","inline-block");
+					}else{
+						$("#"+key).css("display","none");
+					}
+				}
+			});
+		}
+		$('#s_weapon div').click(function(){
+			filterWeapon($(this).attr('id'));
+		});
+		
+		//상단 메뉴 클릭 이벤트
+		$('.top_button').click(function(){
+			showContainer($(this).attr('id'));
+		});
+		
+		//홈 버튼 클릭 이벤트
+		$('#dhome').click(function(){
+			$('html, body').animate({ scrollTop: $('#top_area').offset().top }, 1000);
+		});
+		
+		
+		
+		//
+		function showContainer(select){
+			$('#container .cbody').css("display", "none");
+			$('#c_'+select).css("display", "");
+			$('#sub_area .sbody').css('display', 'none');
+			$('#s_'+select).css('display', '');
+				
+			switch(select){
+				case 'stigmata':
+					if(isInitStigmata){
+						drawStigmatas($("#stigmata_area"));
+						isInitStigmata = false;						
+					}
+					makeStigCombInfo(selectedItem["stigmata"].top, selectedItem["stigmata"].mid, selectedItem["stigmata"].bot, $("#float_body"));
+				break;
+				case 'weapon':
+					if(isInitWeapon){
+						drawWeapons($("#w_area"));
+						isInitWeapon = false;
+					}
+					makeWeaponInfos($("#float_body"), selectedItem["weapon"]);
+				break;
+				case 'memories':
+					$("#float_body").html("");
+				break;
+				case 'valkry':
+					if(isInitValkry){
+						drawValkrys($("#s_valkry"));
+						isInitValkry = false;
+					}
+					$("#float_body").html("");
+				case 'caution':
+					
+				break;
+				default:
+					$("#float_body").html("");
+					break;
+			}
+		}
+		
+		
+		//최초 셋팅
+		showContainer('notice');
+		
+		
+		//텍스트 클립보드 복사
+		function copyToClipboard(val) {
+			var t = document.createElement("textarea");
+			document.body.appendChild(t);
+			t.value = val;
+			t.select();
+			document.execCommand('copy');
+			document.body.removeChild(t);
+		}			
+		$("#s_stigmata_use").click(function(){
+			if($("#s_stigmata_use_img").css("display") == "inline-block"){
+				$("#s_stigmata_use_img").css("display","none");
+			}else{
+				$("#s_stigmata_use_img").css("display","inline-block");
+			}				
+		});
+		
+	
+	});
+
+</script>
+<div id="total_body">
+
+    <div id="top_area">
+        <div class="top_temp"></div>
+
+        <div class="top_button" id="notice">
+            공지
+        </div>
+
+        <div class="top_button" id="stigmata">
+            성흔
+        </div>
+
+        <div class="top_button" id="weapon">
+            무기
+        </div>
+
+        <div class="top_button" id="valkry">
+            발키리
+        </div>
+
+        <div class="top_button" id="memories">
+            전장
+        </div>
+
+
+        <div class="top_button" id="pc">
+            PC로 하기
+        </div>
+
+        <div class="top_button" id="tip">
+            팁
+        </div>
+
+        <div class="top_button" id="no">
+            준비중
+        </div>
+
+        <div class="top_button" id="no">
+            준비중
+        </div>
+
+        <div class="top_button" id="caution">
+            참조
+        </div>
+
+    </div>
+    <br />
+
+    <div id="sub_area">
+        <div id="s_notice" class="sbody">
+            <b><h1><a href="https://rosia.tistory.com/275" target="_blank" class="tx-link">앱 다운로드</a><br /></h1></b>
+        </div>
+
+
+        <div id="s_stigmata" class="sbody">
+            <div id="s_stigmata_use">
+                사용방법
+            </div>
+            <img id="s_stigmata_use_img" src="https://t1.daumcdn.net/cfile/tistory/99DB4B3B5C4E73F715" style="display:none;">
+        </div>
+
+        <!-- 무기 DB 서브 메뉴-->
+        <div id="s_weapon" class="sbody">
+
+            <div class="all" id="all" value="전체">전체</div>
+            <div class="type" id="A" value="쌍권총">쌍권총</div>
+            <div class="type" id="B" value="태도">태도</div>
+            <div class="type" id="C" value="중화기">중화기</div>
+            <div class="type" id="D" value="대검">대검</div>
+            <div class="type" id="E" value="십자가">십자가</div>
+            <div class="type" id="F" value="건틀릿">건틀릿</div>
+            <div class="type" id="G" value="낫">낫</div>
+
+        </div>
+
+        <div id="s_valkry" class="sbody">
+        </div>
+
+        <div id="s_memories" class="sbody">
+            <img src="https://t1.daumcdn.net/cfile/tistory/9997F7355C56715228" class="asubin">
+            <img src="https://t1.daumcdn.net/cfile/tistory/995666355C5671532A" class="yulja">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99E58C345C56715431" class="hukhun">
+            <img src="https://t1.daumcdn.net/cfile/tistory/997A38355C5671532F" class="ghost">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99F5B0345C56715430" class="rpc">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99B12E355C56715227" class="godfa">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99ACC5355C5671532D" class="huka">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99B25D355C5671522E" class="himeko">
+            <img src="https://t1.daumcdn.net/cfile/tistory/9930E4345C5671542F" class="homu">
+            <img src="https://t1.daumcdn.net/cfile/tistory/9901A2345C56715430" class="jijang">
+            <img src="https://t1.daumcdn.net/cfile/tistory/997F95355C5671532F" class="kallen">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99B93A355C56715227" class="berenas">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99EBF0355C5671532A" class="biok">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99E3A8355C5671542D" class="parbati">
+            <img src="https://t1.daumcdn.net/cfile/tistory/9991AE3E5C660D582E" class="dismissm">
+        </div>
+
+        <div id="s_tip" class="sbody">
+            <div class="ttype" id="support" value="서포트 성흔">서포트 성흔</div>
+        </div>
+
+        <div id="s_caution" class="sbody">
+            통합 DB 개발시 참조한 사이트 목록
+        </div>
+    </div>
+    <br />
+    <br />
+    <div id="container">
+
+        <!-- 공지 -->
+        <div id="c_notice" class="cbody">
+           
+        </div>
+
+        <!-- 성흔DB -->
+        <div id="c_stigmata" class="cbody">
+            <!-- 성흔 종류 -->
+            <div id="stigmata_area">
+
+            </div>
+
+            
+
+            
+        </div>
+
+        <!-- 무기DB -->
+        <div id="c_weapon" class="cbody">
+            <br />
+            <br />
+            <!-- 무기 설명 -->
+            <div id="w_desc">
+
+            </div>
+            <br />
+            <br />
+            <!-- 무기 종류 -->
+            <div id="w_area">
+
+            </div>
+
+        </div>
+
+        <!-- 기억전장 -->
+        <div id="c_memories" class="cbody">
+        </div>
+
+        <!-- 주의사항 -->
+        <div id="c_caution" class="cbody">
+
+        </div>
+
+        <!-- 발키리 -->
+        <div id="c_valkry" class="cbody">
+        </div>
+
+        <!--로테이션-->
+        <div id="c_lotation" class="cbody">
+            사용 목적 : 로테이션(성흔, 발키리) 기록용
+        </div>
+
+        <!--이벤트-->
+        <div id="c_event" class="cbody">
+            사용 목적 : 이벤트 기록용
+        </div>
+
+        <!-- PC -->
+        <div id="c_pc" class="cbody">
+
+        </div>
+
+        <div id="c_tip" class="cbody">
+            <br /><br /><br />
+
+            <div id="tip_support" class="t_body_detail">
+
+            </div>
+
+
+        </div>
+
+
+        <div>
+
+        </div>
+    </div>
+</div>
+
+<div id="stigmata_temp">
+</div>
+<!-- 플로팅 영역 -->
+<div class="a">
+    <div class="top">
+        <div class="float_body" id="float_body">
+                        
+        </div>
+    </div>
+</div>
+
+<div id="dhome">
+    <img src="https://lh3.googleusercontent.com/-sbCsdSv9DP0/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQM4NTmzFMVCbua19MOQqWkoDWtNrw/mo/photo.jpg?sz=80">
+</div><p><br /></p>
