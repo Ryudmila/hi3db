@@ -1,0 +1,59 @@
+<script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="conf/dbinfo.js"></script>
+<script src="conf/firebase.js"></script>
+<script src="conf/stigmata.js"></script>
+<script>
+function change(){
+	console.log(db_stigmata);
+	var data = {};
+	data["datas"] = {};
+	$.each(db_stigmata, function(key, item){
+		data["datas"][key] = {};		
+		data["datas"][key]["name"] = item.name
+		if(item.top_desc!="none"){
+			data["datas"][key]["top"] = {};
+			data["datas"][key]["top"]["desc"]=item.top_desc;
+			data["datas"][key]["top"]["rec"]=item.top_rec=="y" ? true : false;
+			data["datas"][key]["top"]["src"]=item.top_src;
+		}
+		if(item.mid_desc!="none"){
+			data["datas"][key]["mid"] = {};
+			data["datas"][key]["mid"]["desc"]=item.mid_desc;
+			data["datas"][key]["mid"]["rec"]=item.mid_rec=="y" ? true : false;
+			data["datas"][key]["mid"]["src"]=item.mid_src;
+		}
+		if(item.bot_desc!="none"){
+			data["datas"][key]["bot"] = {};
+			data["datas"][key]["bot"]["desc"]=item.bot_desc;
+			data["datas"][key]["bot"]["rec"]=item.bot_rec=="y" ? true : false;
+			data["datas"][key]["bot"]["src"]=item.bot_src;			
+		}
+		if(item.set2!="none"){
+			data["datas"][key]["set2"]={};
+			data["datas"][key]["set2"]["desc"]=item.set2;
+			data["datas"][key]["set2"]["rec"]=item.set2_rec=="y"?true:false;
+		}
+		if(item.set3!="none"){
+			data["datas"][key]["set3"]={};
+			data["datas"][key]["set3"]["desc"]=item.set2;
+			data["datas"][key]["set3"]["rec"]=item.set3_rec=="y"?true:false;
+		}
+	});
+	db.collection("new_hidb").doc("stigmata").set(data)
+	.then(function() {
+		console.log("Document successfully written!");
+	})
+	.catch(function(error) {
+		console.error("Error writing document: ", error);
+	});
+	
+}
+function weapon(){
+	
+}
+function valkry(){
+	
+}
+</script>
+<div id="test"><div>

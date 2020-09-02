@@ -1,0 +1,72 @@
+<link rel="stylesheet" type="text/css" href="css/hidb.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+<script src="conf/firebase.js"></script>
+<script>
+	db.collection('test').doc('test2').get().then((snapshot)=>{
+				console.log(snapshot.data().datas)
+				$.each(snapshot.data().datas, function(key, item){
+					console.log(key + " - " + item)
+					$("#test").append(makeStigmata(key, item));
+					console.log(makeStigmata(key, item))
+				});
+			});
+			
+	function makeStigmata(id, stigmata){
+		var strTemp = '<div class="stigmata_body" id="id_stigmata_body" style="width: 450px;display: inline-block;" >					<div class="stigmata_name"><div class="stigmata_set_container"><div class="stigmata_set2">SET2</div><div class = "stigmata_set3">SET3</div></div> <div class="sitgmata_name_value">id_stigmata_name</div></div>					<div class="stigmata_img" align="center">					<img class="class_top_stigmata" src="id_stigmata_top_img" name="id_stigmata_name" id="top" key="id_stigmata_key">					<img class="class_mid_stigmata" src="id_stigmata_mid_img" name="id_stigmata_name" id="mid" key="id_stigmata_key">					<img class="class_bot_stigmata" src="id_stigmata_bot_img" name="id_stigmata_name" id="bot" key="id_stigmata_key">					</div>					<div class="sitgmata_rec"></div></div>';		
+		if(stigmata.top!= null){
+			if(stigmata.top.rec){
+				strTemp = strTemp.replace(/class_top_stigmata/g, "stigmata_rec");
+			}else{
+				strTemp = strTemp.replace(/class_top_stigmata/g, "stigmata");
+			}
+			strTemp = strTemp.replace(/id_stigmata_top_img/g, stigmata.top.src);
+		}else{
+			strTemp = strTemp.replace(/class_top_stigmata/g, "temp_stigmata");
+		}
+		if(stigmata.mid!= null){
+			if(stigmata.mid.rec){
+				strTemp = strTemp.replace(/class_mid_stigmata/g, "stigmata_rec");
+			}else{
+				strTemp = strTemp.replace(/class_mid_stigmata/g, "stigmata");
+			}
+			strTemp = strTemp.replace(/id_stigmata_mid_img/g, stigmata.mid.src);
+		}else{
+			strTemp = strTemp.replace(/class_mid_stigmata/g, "stigmata");
+		}
+		if(stigmata.bot!= null){
+			if(stigmata.bot.rec){
+				strTemp = strTemp.replace(/class_bot_stigmata/g, "stigmata_rec");
+			}else{
+				strTemp = strTemp.replace(/class_bot_stigmata/g, "stigmata");
+			}
+			strTemp = strTemp.replace(/id_stigmata_bot_img/g, stigmata.bot.src);
+		}else{
+			strTemp = strTemp.replace(/class_bot_stigmata/g, "stigmata");
+		}
+		if(stigmata.set2!=null){
+			if(stigmata.set2.rec){
+				
+			}else{
+				strTemp = strTemp.replace(/stigmata_set2/g, "stigmata_none");
+			}			
+		}else{
+			strTemp = strTemp.replace(/stigmata_set2/g, "stigmata_none");
+			
+		}
+		if(stigmata.set3!=null){
+			if(stigmata.set3.rec){
+				
+			}else{
+				strTemp = strTemp.replace(/stigmata_set3/g, "stigmata_none");
+			}
+		}else{
+			strTemp = strTemp.replace(/stigmata_set3/g, "stigmata_none");
+		}		
+		strTemp = strTemp.replace(/id_stigmata_name/g, stigmata.name);
+		strTemp = strTemp.replace(/id_stigmata_key/g, id);
+		strTemp = strTemp.replace(/id_stigmata_body/g, id+"_body");
+		return strTemp;
+	}
+</script>
+<div id="test"></div>
