@@ -1,12 +1,278 @@
-<link rel="stylesheet" type="text/css" href="css/hidb.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
-<script src="conf/firebase.js"></script>
-<script src="conf/dbinfo.js"></script>
-<script src="conf/stigmata.js"></script>
-<script src="conf/weapon.js"></script>
-<script src="conf/valkry.js"></script>
+<style>
+	div{
+		position: relative;
+	}
+	#home{
+		position: fixed;
+		bottom: 5px;
+		right: 5px;
+	}
+	.mbody{
+		margin:12px;
+		border-radius: 15px;
+		width: 900px;
+		text-align:center;
+	}
+	.mbody .dbody{
+		line-height: 250px;
+	    text-align:center;
+	}
+	.mbody .mstigmata{
+		width: 85px;
+	}
+	.mbody .divbody{
+		display: inline-block;
+		position relative;
+		width: 255px;
+	}
+	
+	.mbody .mtop{
+		position: absolute;
+		top:0px;
+		right: 0;
+	}
+	.minfo{
+		position: absolute;
+		top:0px;
+		left: 0;
+	}
+	.mbody .mbot{
+		position: absolute;
+		top: 90px;
+		left: 0;
+	}
+	.mbody .mval{
+		border-radius: 10px;
+	}
+	.mbody legend{
+		border-radius: 10px;
+		color:#fff;
+		background-color:#f69c55;
+		font-size:1.8em;
+		font-weight: 900;
+		padding: 0.3em;
+	}
+	#dhome:hover, #s_memories img:hover, .minfo:hover{
+		cursor: pointer;
+	}
+	#dhome{
+		border-radius: 100%;
+		position: fixed;
+		bottom: 50px;
+		right: 50px;
+	}
+	#dhome img{
+		border-radius: 100%;
+	}
+	#total_body{
+		width: 960px;
+	}
+	.top_button:hover, .type:hover, .all:hover, .ttype:hover{
+		background-color: #f69c55;
+		cursor: pointer;
+	}
+	.top_button{
+		color:rgb(0,38,97);
+		font-weight:bold;
+	}
+	#stigmata_temp{
+		height: 5000px;
+	}
+	#s_stigmata_use:hover, .fclose:hover{
+		cursor: pointer;
+	}
+	#s_stigmata_use{
+		width:116px;
+		height: 40px;
+		line-height: 40px;
+		text-align:center;
+		font-size: 22px;
+		background-color: rgba( 255, 255, 255, 0.5 );
+		border: 2px inset #f69c55;
+	}
+	.type, .all{
+		display:inline;
+		float:left;
+		width:116px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 22px;
+		text-align:center;
+		background-color: rgba( 255, 255, 255, 0.5 );
+		border: 2px dashed #f69c55;
+	}
+	.ttype{
+		display:inline;
+		float:left;
+		width:188px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 22px;
+		text-align:center;
+		background-color: rgba( 255, 255, 255, 0.5 );
+		border: 2px dashed #f69c55;
+	}
+	.skill1:hover, .skill2:hover, .skill3:hover, .skill4:hover, .skill5:hover, .skill6:hover{
+		cursor: pointer;
+		width: 194px;
+		border: 2px solid #f69c55;
+	}
+	#container{
+		width: 960px;
+		text-align:center;
+	}
+	#sub_area{
+		width: 960px;
+		text-align:center;
+	}
+	.top_temp{
+		height: 373.35px;
+	}
+	#top_area{
+		width: 960px;
+		height: 461.35px;
+		background-size: 960px 461.35px;
+		background-image: url("https://t1.daumcdn.net/cfile/tistory/9964273D5C46943D05")
+	}
+	.weaponIcon:hover, .valkry_item, .stigmata_img img:hover{
+		cursor: pointer;
+	}
+	.weaponIcon{
+		width: 120px;
+		height: 105px;
+	}
+	.top_button{
+		display:inline;
+		float:left;
+		width:188px;
+		height: 40px;
+		line-height: 40px;
+		text-align:center;
+		font-size: 22px;
+		background-color: rgba( 255, 255, 255, 0.7 );
+		border: 2px dashed #f69c55;
+	}
+	div.a, #s_valkry, .t_body_detail{
+		margin: auto;
+		text-align: left;
+	}
+	#c_weapon, #c_notice, #c_caution, #c_memories, #c_pc, #float_body {
+		text-align: left;
+	}
+	.top {
+		position: fixed;
+		bottom: 20px;
+		left: 10px;
+	}
+	.float_stigmata{
+		margin:4px;
+	}
+	.float_body{
+		BACKGROUND-COLOR: #fffff0;
+        max-width:650px;
+		border:2px solid #fffff0;
+		border-radius:0.5em;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+		padding:4px;
+	}
+	#descTop, #descMid, #descBot, #setOption{
+		padding-left:10px;
+	}
+	.stigmata_name {
+		width: 420px;
+		margin:4px;
+		text-align:center;
+		font-size:18px;
+		border:2px solid #1bf;
+		padding:9px;
+		font-weight: bold;
+		//color: #fff;
+		line-height: 1em;
+		border-radius:0.5em;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+	}
+	.sitgmata_name_value{
+		display: inline;
+		text-align:center;
+	}
+	.stigmata_set_container{
+		position: absolute;
+	}
+	.stigmata_set2{
+		//position: absolute;
+		//left : 20px;
+		padding:2px;
+		display: inline;
+		border:2px solid #da70d6;
+		BACKGROUND-COLOR: #da70d6;
+		color:#fff;
+		margin-top:-4px;
+		margin-left:3px;
+		margin-right:3px;
+		border-radius:0.5em;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+	}
+	.stigmata_none{
+		display:none;
+	}
+	.stigmata_set3{
+		//position: absolute;
+		//left : 65px;
+
+		padding:2px;
+		display: inline;
+		border:2px solid #da70d6;
+		BACKGROUND-COLOR: #da70d6;
+		color:#fff;
+		margin-top:-4px;
+		margin-left:3px;
+		margin-right:3px;
+		border-radius:0.5em;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+	}
+	.stigmata_img{
+		width: 442px;
+		margin:4px;
+	}
+	.stigmata{
+		margin:3px;
+		border:2px;
+		border-color:black;
+		border-style:solid;
+		border-radius:0.5em;
+	}
+	.stigmata_rec{
+		margin:3px;
+		border:2px;
+		border-color:red;
+		border-style:solid;
+		border-radius:0.5em;
+	}
+	.temp_stigmata{
+		margin:5px;
+	}
+	.float_body th,.float_body td,.float_body tr {
+		padding: 5px;
+		text-align: left;    
+	}
+</style>
 <script>
+	//google firestore initialize
+	var config = {
+		apiKey: "AIzaSyAs6hOrsZO_NtABH1n32Cf97-XFNuzRw-c",
+		authDomain: "hi3db-898a1.firebaseapp.com",
+		databaseURL: "https://hi3db-898a1.firebaseio.com",
+		projectId: "hi3db-898a1",
+		storageBucket: "hi3db-898a1.appspot.com",
+		messagingSenderId: "827915906090"
+	};
+	firebase.initializeApp(config);
 	var grade='{"0":"https://t1.daumcdn.net/cfile/tistory/996347425C55AE3B28","1":"https://t1.daumcdn.net/cfile/tistory/99B989425C55AE3C2E","2":"https://t1.daumcdn.net/cfile/tistory/994898425C55AE3C29","3":"https://t1.daumcdn.net/cfile/tistory/99BC73425C55AE3C2E"}';
 	var videoType = '{"bili":"https://www.bilibili.com/video/av"}';
 	jQuery(document).ready(function() {
@@ -531,6 +797,31 @@
 		$("#s_memories img").click(function(){
 			drawMemory($(this).attr('class'),$("#c_memories"));
 		});
+
+		// param : temp - 필터링할 텍스트
+		function filterStigmata(temp){			
+			$.each(stigmata, function(key, item){
+				if(item.top_desc.includes(temp) || item.mid_desc.includes(temp) || item.bot_desc.includes(temp) || item.name.includes(temp) || item.set2.includes(temp) || item.set3.includes(temp)){
+					$("#"+key+"_body").css("display","inline-block");
+				}else{
+					$("#"+key+"_body").css("display","none");
+				}
+
+			});
+		}
+		function filterWeapon(temp){
+			$.each(weapon, function(key, item){
+				if(temp == "all"){
+					$("#"+key).css("display","inline-block");
+				}else{
+					if(key.substring(2,3) == temp){
+						$("#"+key).css("display","inline-block");
+					}else{
+						$("#"+key).css("display","none");
+					}
+				}
+			});
+		}
 		$('#s_weapon div').click(function(){
 			filterWeapon($(this).attr('id'));
 		});

@@ -1,5 +1,19 @@
 var db_valkry
 db.collection(db_collection).doc(db_doc_valkry).get().then((snapshot)=>{
-				db_valkry = snapshot.data().datas
-				console.log("init_valkry")
-			});
+	db_valkry = snapshot.data().datas
+	console.log("init_valkry")
+});
+
+function drawValkries(targetDiv){
+	var temp = "";
+	$.each(db_valkry, function(key, item){
+		$.each(item, function(id, val){
+			temp += "<img width='120' src='"+val.face+"' class='valkry_item' id='"+id+"'>";
+		})
+		temp += "<br>";
+	});
+	targetDiv.html(temp);
+}
+function getValkryInfo(id){
+	return db_valkry[id.substring(0,id.length-1)][id];
+}
