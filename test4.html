@@ -3,6 +3,8 @@
 <script src="conf/dbinfo.js"></script>
 <script src="conf/firebase.js"></script>
 <script src="conf/stigmata.js"></script>
+<script src="conf/weapon.js"></script>
+<script src="conf/valkry.js"></script>
 <script>
 function change(){
 	console.log(db_stigmata);
@@ -50,10 +52,78 @@ function change(){
 	
 }
 function weapon(){
+	var data = {};
+	data["datas"] = {};
+	//console.log(db_weapon);
+	$.each(db_weapon, function(key, item){
+		data["datas"][key] = {};
+		data["datas"][key]["name"]= item.name;
+		data["datas"][key]["atk"] = item.atk;
+		data["datas"][key]["cri"] = item.cri;
+		data["datas"][key]["src"] = item.src;
+		//console.log(key);
+		rec = new Array();
+		skill = new Array();
+		//data["datas"][key]["rec"] = new Array();
+		//data["datas"][key]["skill"] = new Array();
+		$.each(item.rec, function(key, val){
+			//console.log(val);
+			rec.push(val)
+		});
+		$.each(item.skill, function(key, val){
+			if(val != "none"){
+				skill.push(val)
+				//data["datas"][key]["skill"].push(val);
+			}
+		});
+		data["datas"][key]["rec"] = rec;
+		data["datas"][key]["skill"] = skill;
+		
+	});
+	db.collection("new_hidb").doc("weapon").set(data)
+	.then(function() {
+		console.log("Document successfully written!");
+	})
+	.catch(function(error) {
+		console.error("Error writing document: ", error);
+	});
+	//console.log(data);
 	
 }
 function valkry(){
-	
+//kiana mei bronya himeko sakura theresa kallen huka rita olen seele 
+	var data = {};
+	data["datas"] = {};
+	//data["datas"]["kiana"] = {};
+	$.each(db_valkry, function(key, item){
+		var temp = {};
+		temp["name"] = item.name;
+		temp["face"] = item.face;
+		var arr = [];
+		arr.push(item.skill1);
+		arr.push(item.skill2);
+		arr.push(item.skill3);
+		arr.push(item.skill4);
+		arr.push(item.skill5);
+		arr.push(item.skill6);
+		temp["skill"] = arr;
+		if(item.video != "none"){
+			temp["video"] = item.video;
+		}		
+		if(data["datas"][key.substring(0, key.length-1)] == null || data["datas"][key.substring(0, key.length-1)] == undefined){
+			data["datas"][key.substring(0, key.length-1)] = {};
+		}
+		data["datas"][key.substring(0, key.length-1)][key] = temp;
+	});	
+	console.log(data);
+	db.collection("new_hidb").doc("valkry").set(data)
+	.then(function() {
+		console.log("Document successfully written!");
+	})
+	.catch(function(error) {
+		console.error("Error writing document: ", error);
+	});
+
 }
 </script>
 <div id="test"><div>
