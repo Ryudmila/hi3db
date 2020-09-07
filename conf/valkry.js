@@ -21,9 +21,12 @@ function getValkryInfo(id){
 function descValkryInfo(){
 	$.each(db_valkry, function(id, item){
 		$.each(item, function(key, val){
-			if(val["face"] != ""){
-				$("#test").append(key+ " - " + val["face"]+"<br>");
-			}		
+//			if(val["face"] != ""){
+//				$("#test").append(key+ " - " + val["face"]+"<br>");
+//			}		
+			$.each(val["skill"], function(idx, url){
+				$("#test").append(key+"_"+idx+" - "+url+"<br>");
+			});
 		});
 	});
 }
