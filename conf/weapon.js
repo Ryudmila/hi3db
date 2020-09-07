@@ -35,3 +35,10 @@ function filterWeapon(type){
 	})
 }
 
+function descWeaponInfo(){
+	$.each(db_weapon, function(id, item){
+		if(item["src"] != ""){
+		$("#test").append(id+ " - " + item["src"]+"<br>");
+		}		
+	});
+}

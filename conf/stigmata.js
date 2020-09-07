@@ -3,7 +3,7 @@ db.collection(db_collection).doc(db_doc_stigmata).get().then((snapshot)=>{
 				db_stigmata = snapshot.data().datas
 				console.log("init_stigmata")
 			});
-
+//성흔 기본 UI
 function makeStigmata(id, stigmata){
 	var strTemp = '<div class="stigmata_body" id="id_stigmata_body" style="width: 450px;display: inline-block;" >					<div class="stigmata_name"><div class="stigmata_set_container"><div class="stigmata_set2">SET2</div><div class = "stigmata_set3">SET3</div></div> <div class="sitgmata_name_value">id_stigmata_name</div></div>					<div class="stigmata_img" align="center">					<img class="class_top_stigmata" src="id_stigmata_top_img" name="id_stigmata_name" id="top" key="id_stigmata_key">					<img class="class_mid_stigmata" src="id_stigmata_mid_img" name="id_stigmata_name" id="mid" key="id_stigmata_key">					<img class="class_bot_stigmata" src="id_stigmata_bot_img" name="id_stigmata_name" id="bot" key="id_stigmata_key">					</div>					<div class="sitgmata_rec"></div></div>';		
 	if(stigmata.top!= null){
@@ -60,15 +60,18 @@ function makeStigmata(id, stigmata){
 	strTemp = strTemp.replace(/id_stigmata_body/g, id+"_body");
 	return strTemp;
 }
+//뷰에다가 모든 성흔을 그림
 function drawStigmatas(targetDiv){
 	targetDiv.html('');
 	$.each(db_stigmata, function(id, stigmata){
 		targetDiv.append(makeStigmata(id, stigmata));
 	});
 }
+//단일 성흔 정보 획득
 function getStigmataInfo(id, target){
 	return db_stigmata[id][target];
 }
+//검색 기능
 function filterStigmata(temp){
 	$.each(db_stigmata, function(id, item){
 		var exist = false;
@@ -86,6 +89,7 @@ function filterStigmata(temp){
 		}
 	});
 }
+//성흔 조합 옵션
 function conbineStigmata(sTop, sMid, sBot){
 	var temp = {};
 	var set = {};
@@ -123,4 +127,16 @@ function conbineStigmata(sTop, sMid, sBot){
 		}
 	});
 	return temp;
+}
+
+function descStigmataInfo(){
+	$.each(db_stigmata, function(id, item){
+		$.each(item, function(key, tmp){
+			if(tmp["src"] != undefined){
+				if(tmp["src"]!=""){
+					$("#test").append(id+"_"+key + " - " + tmp["src"]+"<br>");
+				}
+			}
+		});
+	});
 }

@@ -17,3 +17,13 @@ function drawValkries(targetDiv){
 function getValkryInfo(id){
 	return db_valkry[id.substring(0,id.length-1)][id];
 }
+
+function descValkryInfo(){
+	$.each(db_valkry, function(id, item){
+		$.each(item, function(key, val){
+			if(val["face"] != ""){
+				$("#test").append(key+ " - " + val["face"]+"<br>");
+			}		
+		});
+	});
+}
