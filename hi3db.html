@@ -15,22 +15,21 @@ var selectedItem = {};
 selectedItem["stigmata"] = {};
 selectedItem["weapon"] = {};
 jQuery(document).ready(function() {
-	
 	//init data and views
 	initValkry(initedValkry);
 	initWeapon(initedWeapon);
 	initStigmata(initedStigmata);
 	function initedValkry(){
 		drawValkries($("#c_valkry"));
+		$("#s_valkry img").click(function(){
+			drawValkryInfo($("#c_valkry"),getValkryInfo($(this).attr('id')));
+		});
 		isInitValkry = true;
 	}
-	function initedWeapon(){
-	
-		drawWeapons($("#w_area"));
-		
+	function initedWeapon(){	
+		drawWeapons($("#w_area"));		
 		$('#w_area img').click(function(){
-			console.log("call");
-			selectedItem["weapon"] = weapon[$(this).attr('id')];
+			selectedItem["weapon"] = db_weapon[$(this).attr('id')];
 			makeWeaponInfos($("#float_body"), selectedItem["weapon"]);
 		});
 		isInitWeapon = true;
@@ -51,23 +50,45 @@ jQuery(document).ready(function() {
 							selectedItem["stigmata"].bot = $(this).attr('key');
 						break;
 					}
-					//console.log(conbineStigmata(selectedItem["stigmata"].top, selectedItem["stigmata"].mid, selectedItem["stigmata"].bot));
 					makeFloatStigmataConbine($("#float_body"));					
 				}
 			});
 		isInitStigmata = true;
 	}
-
 	//상단 메뉴 클릭 이벤트
 	$('.top_button').click(function(){
 		showContainer($(this).attr('id'));
-	});
-		
+	});		
 	//홈 버튼 클릭 이벤트
 	$('#dhome').click(function(){
 		$('html, body').animate({ scrollTop: $('#top_area').offset().top }, 1000);
 	});
 	
+	function drawValkryInfo(targetDiv, valkry){
+		var strTemp = "<img src='"+valkry["face"]+"'><br/>";
+		strTemp = strTemp + "<h1>" +valkry["name"]+ "</h1>";
+		if(valkry["video"] != null && valkry["video"] != undefined){
+			strTemp = strTemp + "<br /><br /><iframe width='950' height='600' src='"+valkry["video"]+"' frameborder='0' allowfullscreen=''></iframe><br /><br /><br />";
+		}
+		strTemp = strTemp + "<div style='width: 960px; height: 130px;'>"
+		$.each(valkey["skill"], function(idx, url){
+			strTemp = strTemp + "<img class='skill"+(idx+1)+"' width='150' src='"+url+"'>";
+		});
+		//strTemp = strTemp + "<img class='skill1' width='150' src='"+item.skill1+"'>";
+		//strTemp = strTemp + "<img class='skill2' width='150' src='"+item.skill2+"'>";
+		//strTemp = strTemp + "<img class='skill3' width='150' src='"+item.skill3+"'>";
+		//strTemp = strTemp + "<img class='skill4' width='150' src='"+item.skill4+"'>";
+		//strTemp = strTemp + "<img class='skill5' width='150' src='"+item.skill5+"'>";
+		//strTemp = strTemp + "<img class='skill6' width='150' src='"+item.skill6+"'>";
+		strTemp = strTemp + "</div><img id='vSkillDetail' width='950' src='"+item.skill1+"'>";
+		targetDiv.html(strTemp);
+		$("#c_valkry img").click(function(){
+			if($(this).attr("class").substring(0, 5) == "skill"){
+				$("#vSkillDetail").attr("src",$(this).attr("src"));
+			}
+		});
+		$('html, body').animate({ scrollTop: $('#c_valkry').offset().top }, 1000);
+	}
 	
 	function makeFloatStigmataConbine(targetDiv){
 		var topImg = "./img/temp_top";
@@ -98,17 +119,33 @@ jQuery(document).ready(function() {
 			botName = temp["bot"]["name"];
 			botDesc = temp["bot"]["desc"];
 		}
-		if(temp["set"]] != null && temp["set"] != undefined){
+		if(temp["set"] != null && temp["set"] != undefined){
 			$.each(temp["set"], function(key, item){
 				setDesc = setDesc + item + "<br>";
 			});
-		}
-		
+		}		
 		strTemp = "<img src='"+topImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+midImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+botImg+"' style='margin:9px;' id='top_stigmata' key=''><br/><br/><div id='topTitle' class='topTitle'>상 : "+topName+"</div><br/><div id='descTop' class='descTop'>"+topDesc+"</div><br /><div id='midTitle' class='midTitle'>중 : "+midName+"</div><br/><div id='descMid' class='descMid'>"+midDesc+"</div><br /><div id='botTitle' class='botTitle'>하 : "+botName+"</div><br/><div id='descBot' class='descBot'>"+botDesc+"</div><br /><div id='setTitle' class='setTitle'>세트 옵션</div><br /><div id='setOption' class='setOption'>" + setDesc+"</div><br/><div>필터링 : <input type='text' class='filterText'></div>";
+		targetDiv.html(strTemp);		
+		$(".filterText").keyup(function(){filterStigmata($(this).val())});		
+	}
+	
+	function makeWeaponInfos(targetDiv, item){
+		var strTemp = "<table><tr><td rowspan='2' style='width:140px'><img src='weapon_img'></td><td><font size='3'>weapon_name</font></td></tr><tr><td><font size='3'>weapon_stat</font></td></tr>weapon_skill</table>";
+		if(item != null){
+			var strSkill = "";
+			$.each(item["skill"], function(key, item){
+				if(item != null && item != "none"){
+					strSkill = strSkill + "<tr><td colspan='2'>"+item+"</td></tr>";
+				}
+			});
+			strTemp = strTemp.replace(/weapon_img/g, item["src"]);
+			strTemp = strTemp.replace(/weapon_name/g, item["name"]);
+			strTemp = strTemp.replace(/weapon_stat/g, "공격력 : " + item["atk"] + " 회심 : " + item["cri"]);
+			strTemp = strTemp.replace(/weapon_skill/g, strSkill);			
+		}else{
+			strTemp = "";
+		}
 		targetDiv.html(strTemp);
-		
-		$(".filterText").keyup(function(){filterStigmata($(this).val())});
-		
 	}
 	
 	function showContainer(select){
@@ -119,10 +156,11 @@ jQuery(document).ready(function() {
 			
 		switch(select){
 			case 'stigmata':		
+				makeFloatStigmataConbine($("#float_body"));
 				//makeStigCombInfo(selectedItem["stigmata"].top, selectedItem["stigmata"].mid, selectedItem["stigmata"].bot, $("#float_body"));
 			break;
 			case 'weapon':
-				//makeWeaponInfos($("#float_body"), selectedItem["weapon"]);
+				makeWeaponInfos($("#float_body"), selectedItem["weapon"]);
 			break;
 			case 'memories':
 				$("#float_body").html("");
@@ -145,7 +183,7 @@ jQuery(document).ready(function() {
 	
 	
 	//init page
-	//showContainer('notice');
+	showContainer('notice');
 });
 </script>
 <div id="test">
@@ -345,7 +383,7 @@ jQuery(document).ready(function() {
 <div class="a">
     <div class="top">
         <div class="float_body" id="float_body">
-               asdfasdfasdfasdfasdfasdfasdfasdfasdfasd         
+                
         </div>
     </div>
 </div>
