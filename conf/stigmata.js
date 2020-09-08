@@ -1,8 +1,24 @@
 var db_stigmata
-db.collection(db_collection).doc(db_doc_stigmata).get().then((snapshot)=>{
-				db_stigmata = snapshot.data().datas
-				console.log("init_stigmata")
-			});
+function initStigmata(callback){
+	db.collection(db_collection).doc(db_doc_stigmata).get().then(
+	function(doc){
+		if(doc.exists){
+			console.log("data exist");
+			db_stigmata=doc.data()
+			callback();
+		}else{
+			console.log("no data")
+		}
+		
+	}).catch(function(error){
+		console.log("error - " + error);
+	});
+	//(snapshot)=>{
+	//	db_stigmata = snapshot.data().datas
+	//	console.log(db_stigmata);
+	//	callback();
+	//});	
+}
 //성흔 기본 UI
 function makeStigmata(id, stigmata){
 	var strTemp = '<div class="stigmata_body" id="id_stigmata_body" style="width: 450px;display: inline-block;" >					<div class="stigmata_name"><div class="stigmata_set_container"><div class="stigmata_set2">SET2</div><div class = "stigmata_set3">SET3</div></div> <div class="sitgmata_name_value">id_stigmata_name</div></div>					<div class="stigmata_img" align="center">					<img class="class_top_stigmata" src="id_stigmata_top_img" name="id_stigmata_name" id="top" key="id_stigmata_key">					<img class="class_mid_stigmata" src="id_stigmata_mid_img" name="id_stigmata_name" id="mid" key="id_stigmata_key">					<img class="class_bot_stigmata" src="id_stigmata_bot_img" name="id_stigmata_name" id="bot" key="id_stigmata_key">					</div>					<div class="sitgmata_rec"></div></div>';		
@@ -62,7 +78,9 @@ function makeStigmata(id, stigmata){
 }
 //뷰에다가 모든 성흔을 그림
 function drawStigmatas(targetDiv){
+	console.log("call drawStigmatas");
 	targetDiv.html('');
+	console.log(db_stigmata);
 	$.each(db_stigmata, function(id, stigmata){
 		targetDiv.append(makeStigmata(id, stigmata));
 	});
@@ -91,10 +109,12 @@ function filterStigmata(temp){
 }
 //성흔 조합 옵션
 function conbineStigmata(sTop, sMid, sBot){
+	console.log("conbineStigmata - " + sTop + ", " + sMid + ", " + sBot);
 	var temp = {};
 	var set = {};
 	if(sTop != null && sTop != undefined){
 		temp["top"] = db_stigmata[sTop]["top"]
+		temp["top"]["name"] = db_stigmata[sTop]["name"]
 		if(set[sTop] == null || set[sTop] == undefined){
 			set[sTop] = 1;
 		}else{
@@ -103,6 +123,7 @@ function conbineStigmata(sTop, sMid, sBot){
 	}
 	if(sMid != null && sMid != undefined){
 		temp["mid"] = db_stigmata[sMid]["mid"]
+		temp["mid"]["name"] = db_stigmata[sMid]["name"]
 		if(set[sMid] == null || set[sMid] == undefined){
 			set[sMid] = 1;
 		}else{
@@ -111,6 +132,7 @@ function conbineStigmata(sTop, sMid, sBot){
 	}
 	if(sBot != null && sBot != undefined){
 		temp["bot"] = db_stigmata[sBot]["bot"]
+		temp["bot"]["name"] = db_stigmata[sBot]["name"]
 		if(set[sBot] == null || set[sBot] == undefined){
 			set[sBot] = 1;
 		}else{

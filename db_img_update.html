@@ -1,0 +1,56 @@
+<script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="conf/dbinfo.js"></script>
+<script src="conf/firebase.js"></script>
+<script src="conf/stigmata.js"></script>
+<script src="conf/weapon.js"></script>
+<script src="conf/valkry.js"></script>
+<script>
+function updateWeapon(){
+	$.each(db_weapon, function(key, item){
+		if(item["src"] != undefined){
+			item["src"] = "./img/weapon/"+key;
+		}
+	});
+	db.collection("new_hidb").doc("weapon").set(db_weapon)
+	.then(function() {
+		console.log("Document successfully written!");
+	})
+	.catch(function(error) {
+		console.error("Error writing document: ", error);
+	});
+}
+function updateValkry(){
+	$.each(db_valkry, function(id, item){
+		$.each(item, function(key, val){
+			val["face"] = "./img/valkry/"+key;
+			$.each(val["skill"], function(idx, url){
+				val["skill"][idx] = "./img/valkry/skills/"+key+"_"+idx;
+			});
+		});
+	});
+	db.collection("new_hidb").doc("valkry").set(db_valkry)
+	.then(function() {
+		console.log("Document successfully written!");
+	})
+	.catch(function(error) {
+		console.error("Error writing document: ", error);
+	});
+}
+function updateStigmata(){
+	$.each(db_stigmata, function(key, item){
+		$.each(item, function(type, obj){
+			if(obj["src"] != undefined){
+				obj["src"] = "./img/stigmata/"+key+"_"+type;
+			};
+		});
+	});
+	db.collection("new_hidb").doc("stigmata").set(db_stigmata)
+	.then(function() {
+		console.log("Document successfully written!");
+	})
+	.catch(function(error) {
+		console.error("Error writing document: ", error);
+	});
+}
+</script>

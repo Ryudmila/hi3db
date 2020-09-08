@@ -1,0 +1,355 @@
+<link rel="stylesheet" type="text/css" href="css/hidb.css">
+<script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="conf/dbinfo.js"></script>
+<script src="conf/firebase.js"></script>
+<script src="conf/stigmata.js"></script>
+<script src="conf/weapon.js"></script>
+<script src="conf/valkry.js"></script>
+<script>
+var isInitStigmata = true;
+var isInitWeapon = true;
+var isInitValkry = true;
+var isInitMemory = true;
+var selectedItem = {};
+selectedItem["stigmata"] = {};
+selectedItem["weapon"] = {};
+jQuery(document).ready(function() {
+	
+	//init data and views
+	initValkry(initedValkry);
+	initWeapon(initedWeapon);
+	initStigmata(initedStigmata);
+	function initedValkry(){
+		drawValkries($("#c_valkry"));
+		isInitValkry = true;
+	}
+	function initedWeapon(){
+	
+		drawWeapons($("#w_area"));
+		
+		$('#w_area img').click(function(){
+			console.log("call");
+			selectedItem["weapon"] = weapon[$(this).attr('id')];
+			makeWeaponInfos($("#float_body"), selectedItem["weapon"]);
+		});
+		isInitWeapon = true;
+	}
+	function initedStigmata(){
+		drawStigmatas($("#stigmata_area"));	
+		$('#stigmata_area img').click(function(){
+				if($(this).attr('class') != 'temp_stigmata'){
+					console.log("call - " + $(this).attr('key'));
+					switch($(this).attr('id')){
+						case 'top':
+							selectedItem["stigmata"].top = $(this).attr('key');
+						break;
+						case 'mid':
+							selectedItem["stigmata"].mid = $(this).attr('key');
+						break;
+							case 'bot':
+							selectedItem["stigmata"].bot = $(this).attr('key');
+						break;
+					}
+					//console.log(conbineStigmata(selectedItem["stigmata"].top, selectedItem["stigmata"].mid, selectedItem["stigmata"].bot));
+					makeFloatStigmataConbine($("#float_body"));					
+				}
+			});
+		isInitStigmata = true;
+	}
+
+	//상단 메뉴 클릭 이벤트
+	$('.top_button').click(function(){
+		showContainer($(this).attr('id'));
+	});
+		
+	//홈 버튼 클릭 이벤트
+	$('#dhome').click(function(){
+		$('html, body').animate({ scrollTop: $('#top_area').offset().top }, 1000);
+	});
+	
+	
+	function makeFloatStigmataConbine(targetDiv){
+		var topImg = "./img/temp_top";
+		var midImg = "./img/temp_mid";
+		var botImg = "./img/temp_bot";
+		var topName = "";
+		var midName = "";
+		var botName = "";
+		var topDesc = "";
+		var midDesc = "";
+		var botDesc = "";
+		var setDesc = "";
+		var strTemp = "";
+		var temp = conbineStigmata(selectedItem["stigmata"].top, selectedItem["stigmata"].mid, selectedItem["stigmata"].bot);
+		
+		if(temp["top"] != null && temp["top"] != undefined){
+			topImg = temp["top"]["src"];
+			topName = temp["top"]["name"];
+			topDesc = temp["top"]["desc"];
+		}
+		if(temp["mid"] != null && temp["mid"] != undefined){
+			midImg = temp["mid"]["src"];
+			midName = temp["mid"]["name"];
+			midDesc = temp["mid"]["desc"];
+		}
+		if(temp["bot"] != null && temp["bot"] != undefined){
+			botImg = temp["bot"]["src"];
+			botName = temp["bot"]["name"];
+			botDesc = temp["bot"]["desc"];
+		}
+		if(temp["set"]] != null && temp["set"] != undefined){
+			$.each(temp["set"], function(key, item){
+				setDesc = setDesc + item + "<br>";
+			});
+		}
+		
+		strTemp = "<img src='"+topImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+midImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+botImg+"' style='margin:9px;' id='top_stigmata' key=''><br/><br/><div id='topTitle' class='topTitle'>상 : "+topName+"</div><br/><div id='descTop' class='descTop'>"+topDesc+"</div><br /><div id='midTitle' class='midTitle'>중 : "+midName+"</div><br/><div id='descMid' class='descMid'>"+midDesc+"</div><br /><div id='botTitle' class='botTitle'>하 : "+botName+"</div><br/><div id='descBot' class='descBot'>"+botDesc+"</div><br /><div id='setTitle' class='setTitle'>세트 옵션</div><br /><div id='setOption' class='setOption'>" + setDesc+"</div><br/><div>필터링 : <input type='text' class='filterText'></div>";
+		targetDiv.html(strTemp);
+		
+		$(".filterText").keyup(function(){filterStigmata($(this).val())});
+		
+	}
+	
+	function showContainer(select){
+		$('#container .cbody').css("display", "none");
+		$('#c_'+select).css("display", "");
+		$('#sub_area .sbody').css('display', 'none');
+		$('#s_'+select).css('display', '');
+			
+		switch(select){
+			case 'stigmata':		
+				//makeStigCombInfo(selectedItem["stigmata"].top, selectedItem["stigmata"].mid, selectedItem["stigmata"].bot, $("#float_body"));
+			break;
+			case 'weapon':
+				//makeWeaponInfos($("#float_body"), selectedItem["weapon"]);
+			break;
+			case 'memories':
+				$("#float_body").html("");
+			break;
+			case 'valkry':
+				$("#float_body").html("");
+			case 'caution':
+				
+			break;
+			default:
+				$("#float_body").html("");
+			break;
+		}
+	}
+	
+	$('#s_weapon div').click(function(){
+		filterWeapon($(this).attr('id'));
+	});
+	
+	
+	
+	//init page
+	//showContainer('notice');
+});
+</script>
+<div id="test">
+
+            </div>
+
+<div id="total_body">
+
+    <div id="top_area">
+        <div class="top_temp"></div>
+
+        <div class="top_button" id="notice">
+            공지
+        </div>
+
+        <div class="top_button" id="stigmata">
+            성흔
+        </div>
+
+        <div class="top_button" id="weapon">
+            무기
+        </div>
+
+        <div class="top_button" id="valkry">
+            발키리
+        </div>
+
+        <div class="top_button" id="memories">
+            전장
+        </div>
+
+
+        <div class="top_button" id="pc">
+            PC로 하기
+        </div>
+
+        <div class="top_button" id="tip">
+            팁
+        </div>
+
+        <div class="top_button" id="no">
+            준비중
+        </div>
+
+        <div class="top_button" id="no">
+            준비중
+        </div>
+
+        <div class="top_button" id="caution">
+            참조
+        </div>
+
+    </div>
+    <br />
+
+    <div id="sub_area">
+        <div id="s_notice" class="sbody">
+            <b><h1><a href="https://rosia.tistory.com/275" target="_blank" class="tx-link">앱 다운로드</a><br /></h1></b>
+        </div>
+
+
+        <div id="s_stigmata" class="sbody">
+            <div id="s_stigmata_use">
+                사용방법
+            </div>
+            <img id="s_stigmata_use_img" src="https://t1.daumcdn.net/cfile/tistory/99DB4B3B5C4E73F715" style="display:none;">
+        </div>
+
+        <!-- 무기 DB 서브 메뉴-->
+        <div id="s_weapon" class="sbody">
+
+            <div class="all" id="all" value="전체">전체</div>
+            <div class="type" id="A" value="쌍권총">쌍권총</div>
+            <div class="type" id="B" value="태도">태도</div>
+            <div class="type" id="C" value="중화기">중화기</div>
+            <div class="type" id="D" value="대검">대검</div>
+            <div class="type" id="E" value="십자가">십자가</div>
+            <div class="type" id="F" value="건틀릿">건틀릿</div>
+            <div class="type" id="G" value="낫">낫</div>
+
+        </div>
+
+        <div id="s_valkry" class="sbody">
+        </div>
+
+        <div id="s_memories" class="sbody">
+            <img src="https://t1.daumcdn.net/cfile/tistory/9997F7355C56715228" class="asubin">
+            <img src="https://t1.daumcdn.net/cfile/tistory/995666355C5671532A" class="yulja">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99E58C345C56715431" class="hukhun">
+            <img src="https://t1.daumcdn.net/cfile/tistory/997A38355C5671532F" class="ghost">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99F5B0345C56715430" class="rpc">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99B12E355C56715227" class="godfa">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99ACC5355C5671532D" class="huka">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99B25D355C5671522E" class="himeko">
+            <img src="https://t1.daumcdn.net/cfile/tistory/9930E4345C5671542F" class="homu">
+            <img src="https://t1.daumcdn.net/cfile/tistory/9901A2345C56715430" class="jijang">
+            <img src="https://t1.daumcdn.net/cfile/tistory/997F95355C5671532F" class="kallen">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99B93A355C56715227" class="berenas">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99EBF0355C5671532A" class="biok">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99E3A8355C5671542D" class="parbati">
+            <img src="https://t1.daumcdn.net/cfile/tistory/9991AE3E5C660D582E" class="dismissm">
+        </div>
+
+        <div id="s_tip" class="sbody">
+            <div class="ttype" id="support" value="서포트 성흔">서포트 성흔</div>
+        </div>
+
+        <div id="s_caution" class="sbody">
+            통합 DB 개발시 참조한 사이트 목록
+        </div>
+    </div>
+    <br />
+    <br />
+    <div id="container">
+
+        <!-- 공지 -->
+        <div id="c_notice" class="cbody">
+           
+        </div>
+
+        <!-- 성흔DB -->
+        <div id="c_stigmata" class="cbody">
+            <!-- 성흔 종류 -->
+            <div id="stigmata_area">
+
+            </div>
+
+            
+
+            
+        </div>
+
+        <!-- 무기DB -->
+        <div id="c_weapon" class="cbody">
+            <br />
+            <br />
+            <!-- 무기 설명 -->
+            <div id="w_desc">
+
+            </div>
+            <br />
+            <br />
+            <!-- 무기 종류 -->
+            <div id="w_area">
+
+            </div>
+
+        </div>
+
+        <!-- 기억전장 -->
+        <div id="c_memories" class="cbody">
+        </div>
+
+        <!-- 주의사항 -->
+        <div id="c_caution" class="cbody">
+        </div>
+
+        <!-- 발키리 -->
+        <div id="c_valkry" class="cbody">
+        </div>
+
+        <!--로테이션-->
+        <div id="c_lotation" class="cbody">
+            사용 목적 : 로테이션(성흔, 발키리) 기록용
+        </div>
+
+        <!--이벤트-->
+        <div id="c_event" class="cbody">
+            사용 목적 : 이벤트 기록용
+        </div>
+
+        <!-- PC -->
+        <div id="c_pc" class="cbody">
+
+        </div>
+
+        <div id="c_tip" class="cbody">
+            <br /><br /><br />
+
+            <div id="tip_support" class="t_body_detail">
+
+            </div>
+
+
+        </div>
+
+
+        <div>
+
+        </div>
+    </div>
+</div>
+
+<div id="stigmata_temp">
+</div>
+<!-- 플로팅 영역 -->
+<div class="a">
+    <div class="top">
+        <div class="float_body" id="float_body">
+               asdfasdfasdfasdfasdfasdfasdfasdfasdfasd         
+        </div>
+    </div>
+</div>
+
+<div id="dhome">
+    <img src="https://lh3.googleusercontent.com/-sbCsdSv9DP0/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQM4NTmzFMVCbua19MOQqWkoDWtNrw/mo/photo.jpg?sz=80">
+</div><p><br /></p>
