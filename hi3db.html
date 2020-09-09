@@ -121,7 +121,7 @@ jQuery(document).ready(function() {
 		}
 		if(temp["set"] != null && temp["set"] != undefined){
 			$.each(temp["set"], function(key, item){
-				setDesc = setDesc + item + "<br>";
+				setDesc = setDesc + item["desc"] + "<br>";
 			});
 		}		
 		strTemp = "<img src='"+topImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+midImg+"' style='margin:9px;' id='top_stigmata' key=''><img src='"+botImg+"' style='margin:9px;' id='top_stigmata' key=''><br/><br/><div id='topTitle' class='topTitle'>상 : "+topName+"</div><br/><div id='descTop' class='descTop'>"+topDesc+"</div><br /><div id='midTitle' class='midTitle'>중 : "+midName+"</div><br/><div id='descMid' class='descMid'>"+midDesc+"</div><br /><div id='botTitle' class='botTitle'>하 : "+botName+"</div><br/><div id='descBot' class='descBot'>"+botDesc+"</div><br /><div id='setTitle' class='setTitle'>세트 옵션</div><br /><div id='setOption' class='setOption'>" + setDesc+"</div><br/><div>필터링 : <input type='text' class='filterText'></div>";
